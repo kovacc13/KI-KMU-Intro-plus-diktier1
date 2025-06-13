@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KI-Einführung für KMU: Strategie, Förderung & Praxis</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body { 
+            font-family: 'Inter', sans-serif; 
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .tab-button.active {
+            border-color: #0891b2;
+            background-color: #fff;
+            color: #0891b2;
+            font-weight: 600;
+            box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+        }
+        .tab-button {
+            transition: all 0.2s ease-in-out;
+        }
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
+            padding: 0 1.5rem;
+        }
+        .collapsible-content.expanded {
+            max-height: 500px;
+            padding: 1.5rem;
+        }
+        .chevron-icon.rotated {
+            transform: rotate(180deg);
+        }
+        .pulse-red {
+            animation: pulse-red 2s infinite;
+        }
+        @keyframes pulse-red {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+        <!-- Header Section -->
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-slate-900 tracking-tight">KI in ihrem Betrieb:: Von der Strategie zur konkreten Umsetzung</h1>
+            <p class="mt-4 text-lg text-slate-600 max-w-3xl mx-auto">Mit Bildungswelten für den KI-Einstieg: Starten Sie Ihre Umsetzung und nutzen Sie die Chance auf <span class="font-semibold text-amber-600">50% FFG-Förderung</span>.</p>
+        </header>
+
+        <!-- Tab Navigation -->
+        <div class="mb-10 flex flex-wrap justify-center border-b border-slate-200">
+            <button data-tab="tab-strategy" class="tab-button active text-slate-500 py-3 px-6 border-b-2 border-transparent text-center font-medium rounded-t-lg">Strategie & Umsetzung</button>
+            <button data-tab="tab-examples" class="tab-button text-slate-500 py-3 px-6 border-b-2 border-transparent text-center font-medium rounded-t-lg">Praxisbeispiele: Facility Management</button>
+            <button data-tab="tab-funding" class="tab-button text-slate-500 py-3 px-6 border-b-2 border-transparent text-center font-medium rounded-t-lg">FFG-Förderung</button>
+        </div>
+
+        <!-- Main Content Area -->
+        <main>
+            <!-- Tab 1: Strategy & Implementation -->
+            <div id="tab-strategy" class="tab-content active">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-slate-800">Ihr Weg zur KI-Integration in 4 Schritten</h2>
+                    <p class="mt-2 text-md text-slate-500">bit Bildungswelten führt Sie strukturiert von der ersten Idee bis zum erfolgreichen Roll-out.</p>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                     <!-- Step 1-4 -->
+                     <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200/80 text-center">
+                        <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-cyan-100 text-cyan-700 text-3xl font-bold">1</div>
+                        <h3 class="mt-5 text-xl font-bold text-slate-900">Potenzialanalyse</h3>
+                        <p class="mt-2 text-slate-600">Wir identifizieren gemeinsam konkrete Anwendungsfälle, wo KI in Ihrem Unternehmen den größten Mehrwert stiftet.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200/80 text-center">
+                        <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-cyan-100 text-cyan-700 text-3xl font-bold">2</div>
+                        <h3 class="mt-5 text-xl font-bold text-slate-900">Strategieentwicklung</h3>
+                        <p class="mt-2 text-slate-600">Wir entwickeln eine klare KI-Roadmap mit definierten Zielen, Meilensteinen und einer transparenten ROI-Betrachtung.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200/80 text-center">
+                        <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-cyan-100 text-cyan-700 text-3xl font-bold">3</div>
+                        <h3 class="mt-5 text-xl font-bold text-slate-900">Pilotprojekt & Umsetzung</h3>
+                        <p class="mt-2 text-slate-600">Wir setzen ein überschaubares Pilotprojekt um, um die Technologie zu testen und den Nutzen schnell zu beweisen.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200/80 text-center">
+                        <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-cyan-100 text-cyan-700 text-3xl font-bold">4</div>
+                        <h3 class="mt-5 text-xl font-bold text-slate-900">Skalierung & Optimierung</h3>
+                        <p class="mt-2 text-slate-600">Nach dem Erfolg unterstützen wir Sie beim Roll-out, schulen Mitarbeiter und sorgen für kontinuierliche Verbesserung.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 2: Practical Examples: Facility Management -->
+            <div id="tab-examples" class="tab-content">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold text-slate-800">KI in der Praxis: Facility Management</h2>
+                    <p class="mt-2 text-md text-slate-500">Klicken Sie auf eine Karte, um konkrete Lösungsansätze zu sehen.</p>
+                </div>
+                <div class="space-y-4">
+                    <!-- Example Cards -->
+                    <div class="collapsible-card bg-white rounded-xl shadow-lg overflow-hidden border border-slate-200/80">
+                        <div class="collapsible-header grid md:grid-cols-2 gap-0 cursor-pointer hover:bg-slate-50/50 transition-colors duration-200">
+                            <div class="p-6 border-r border-slate-200/80"><h3 class="font-bold text-lg text-amber-600 flex items-center"><span class="text-3xl mr-3">🔧</span>Unerwartete Anlagenausfälle</h3><p class="mt-2 text-slate-600">HLK-Anlagen fallen ohne Vorwarnung aus, was zu teuren Reparaturen und unzufriedenen Mietern führt.</p></div>
+                            <div class="p-6 bg-cyan-50/30 flex flex-col justify-between"><h3 class="font-bold text-lg text-cyan-700 flex items-center"><span class="text-3xl mr-3">📈</span>Vorausschauende Wartung</h3><p class="mt-2 text-slate-600">KI analysiert Sensordaten, erkennt Verschleißmuster und meldet Wartungsbedarf, *bevor* ein Ausfall passiert.</p><div class="mt-4"><span class="inline-flex items-center text-cyan-800 text-sm font-medium">Lösungsansatz anzeigen<svg class="chevron-icon ml-2 w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></span></div></div>
+                        </div>
+                        <div class="collapsible-content bg-slate-50 border-t border-slate-200/80">
+                            <h4 class="font-semibold text-slate-800">Konkrete Umsetzung:</h4>
+                            <p class="mt-2 text-slate-600">Sensoren an einer Lüftungsanlage messen Vibrationen. Eine KI erkennt eine zunehmende Unwucht. Statt auf den Totalausfall zu warten, wird automatisch ein Techniker gebucht. Die Reparatur erfolgt ohne Betriebsunterbrechung.</p>
+                        </div>
+                    </div>
+                     <div class="collapsible-card bg-white rounded-xl shadow-lg overflow-hidden border border-slate-200/80">
+                        <div class="collapsible-header grid md:grid-cols-2 gap-0 cursor-pointer hover:bg-slate-50/50 transition-colors duration-200">
+                            <div class="p-6 border-r border-slate-200/80"><h3 class="font-bold text-lg text-amber-600 flex items-center"><span class="text-3xl mr-3">🗑️</span>Ineffiziente Reinigung</h3><p class="mt-2 text-slate-600">Räume werden nach starrem Plan gereinigt, obwohl viele ungenutzt blieben. Andere Bereiche werden vernachlässigt.</p></div>
+                            <div class="p-6 bg-cyan-50/30 flex flex-col justify-between"><h3 class="font-bold text-lg text-cyan-700 flex items-center"><span class="text-3xl mr-3">🧠</span>Bedarfsgerechte Reinigung</h3><p class="mt-2 text-slate-600">KI analysiert Belegungsdaten und plant Reinigungsrouten dynamisch – gereinigt wird dort, wo es nötig ist.</p><div class="mt-4"><span class="inline-flex items-center text-cyan-800 text-sm font-medium">Lösungsansatz anzeigen<svg class="chevron-icon ml-2 w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></span></div></div>
+                        </div>
+                        <div class="collapsible-content bg-slate-50 border-t border-slate-200/80">
+                             <h4 class="font-semibold text-slate-800">Konkrete Umsetzung:</h4>
+                             <p class="mt-2 text-slate-600">Sensoren registrieren die Nutzung von Konferenzräumen. Das Team erhält per App die Anweisung, nur die genutzten Räume intensiv zu reinigen. Toiletten im Eingangsbereich werden zusätzlich priorisiert.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 3: Funding & Next Steps -->
+            <div id="tab-funding" class="tab-content">
+                 <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold text-slate-800">Jetzt 50% Förderung sichern!</h2>
+                     <p class="mt-2 text-md text-slate-500 max-w-2xl mx-auto">Der FFG Digitalisierungs- und Innovationsscheck für KMU macht den Einstieg in die KI besonders attraktiv.</p>
+                </div>
+                <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg border border-slate-200/80 overflow-hidden">
+                    <div class="grid md:grid-cols-2">
+                        <div class="p-8">
+                            <h3 class="text-2xl font-bold text-cyan-700">FFG Innovationsscheck</h3>
+                            <p class="mt-4 text-slate-600">Mit dem Innovationsscheck der FFG können KMU externe Forschungs- und Entwicklungsdienstleistungen in Anspruch nehmen, um ihre Innovationskraft zu stärken.</p>
+                            <ul class="mt-6 space-y-3">
+                                <li class="flex items-start"><span class="text-cyan-500 mr-3 mt-1">✔</span><span><strong class="font-semibold text-slate-700">Förderhöhe:</strong> 50% der Projektkosten (max. € 12.500,- Scheck).</span></li>
+                                <li class="flex items-start"><span class="text-cyan-500 mr-3 mt-1">✔</span><span><strong class="font-semibold text-slate-700">Was wird gefördert:</strong> Kosten für Konzeption, Entwicklung und Umsetzung von KI-Pilotprojekten.</span></li>
+                                <li class="flex items-start"><span class="text-cyan-500 mr-3 mt-1">✔</span><span><strong class="font-semibold text-slate-700">Ihr Vorteil:</strong> Reduzieren Sie Ihr Risiko und profitieren Sie von externem Know-how.</span></li>
+                            </ul>
+                        </div>
+                         <div class="p-8 bg-cyan-50/50 flex flex-col items-center justify-center">
+                             <h4 class="text-xl font-bold text-slate-800 text-center">Bereit für den nächsten Schritt?</h4>
+                             <p class="mt-2 text-center text-slate-600">Wir beraten Sie unverbindlich zur FFG-Förderung.</p>
+                             <button class="mt-6 bg-amber-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-amber-600 transition-colors shadow-md">
+                                 Kostenloses Erstgespräch anfordern
+                             </button>
+                         </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Interaction Section -->
+        <section id="interaction-section" class="mt-20 py-12 bg-white rounded-xl shadow-xl border border-slate-200/80">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold text-slate-800">Ihre Stimme zählt: Was bewegt Sie?</h2>
+                    <p class="mt-2 text-md text-slate-500">Teilen Sie uns Ihre Gedanken, Fragen oder Herausforderungen zum Thema KI in Ihrem Unternehmen mit.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 items-start">
+                    <!-- Form Inputs -->
+                    <div class="space-y-4">
+                        <div>
+                            <label for="position" class="block text-sm font-medium text-slate-700">Position im Unternehmen</label>
+                            <input type="text" name="position" id="position" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-cyan-500 focus:border-cyan-500">
+                        </div>
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-slate-700">Name <span class="text-slate-400">(optional)</span></label>
+                            <input type="text" name="name" id="name" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-cyan-500 focus:border-cyan-500">
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-slate-700">E-Mail</label>
+                            <input type="email" name="email" id="email" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-cyan-500 focus:border-cyan-500" placeholder="fuer-das-transkript@beispiel.com">
+                             <p class="mt-1 text-xs text-slate-500">Notwendig, um Ihnen das Transkript per E-Mail zu senden.</p>
+                        </div>
+                    </div>
+                    <!-- Dictation App -->
+                    <div class="bg-slate-50 p-6 rounded-lg border border-slate-200 h-full flex flex-col">
+                        <div class="flex-grow">
+                             <p id="recording-status" class="text-sm text-center text-slate-600 mb-4">Klicken Sie auf das Mikrofon, um die Aufnahme zu starten.</p>
+                             <textarea id="transcript" class="w-full h-32 p-3 border border-slate-300 rounded-md focus:ring-cyan-500 focus:border-cyan-500" placeholder="Ihre transkribierte Nachricht erscheint hier..."></textarea>
+                        </div>
+                        <div class="flex items-center justify-center mt-4">
+                            <button id="mic-button" class="w-16 h-16 bg-cyan-600 text-white rounded-full flex items-center justify-center hover:bg-cyan-700 transition-colors shadow-lg">
+                                <svg id="mic-icon" class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20"><path d="M7 4a3 3 0 016 0v6a3 3 0 11-6 0V4z"/><path d="M5.5 4.5a.5.5 0 01.5-.5h8a.5.5 0 010 1h-8a.5.5 0 01-.5-.5zM9 14a4 4 0 004-4h-1a3 3 0 11-6 0H5a4 4 0 004 4z"/><path d="M9 16a1 1 0 011-1h0a1 1 0 110 2h-.5a.5.5 0 01-.5-.5v-1z"/><path d_stop="M10 18a8 8 0 100-16 8 8 0 000 16zm0-2a6 6 0 110-12 6 6 0 010 12z" d_play="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"/></svg>
+                            </button>
+                        </div>
+                        <button id="send-transcript" class="mt-6 w-full bg-amber-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-amber-600 transition-colors shadow-md disabled:bg-slate-400 disabled:cursor-not-allowed" disabled>
+                            Transkript senden
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Custom Message Box -->
+        <div id="message-box" class="hidden fixed top-5 right-5 bg-green-500 text-white py-2 px-4 rounded-lg shadow-lg animate-fadeIn">
+            <p id="message-text"></p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Tab navigation logic
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    button.classList.add('active');
+                    document.getElementById(button.dataset.tab).classList.add('active');
+                });
+            });
+
+            // Collapsible cards logic
+            const collapsibleHeaders = document.querySelectorAll('.collapsible-header');
+            collapsibleHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const content = header.nextElementSibling;
+                    const icon = header.querySelector('.chevron-icon');
+                    if (content && icon) {
+                        content.classList.toggle('expanded');
+                        icon.classList.toggle('rotated');
+                    }
+                });
+            });
+
+            // --- Dictation App Logic ---
+            const micButton = document.getElementById('mic-button');
+            const micIcon = document.getElementById('mic-icon');
+            const transcriptArea = document.getElementById('transcript');
+            const statusDisplay = document.getElementById('recording-status');
+            const sendButton = document.getElementById('send-transcript');
+            const emailInput = document.getElementById('email');
+
+            // Check for browser support
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                statusDisplay.textContent = "Ihr Browser unterstützt die Spracherkennung leider nicht.";
+                micButton.disabled = true;
+                return;
+            }
+
+            const recognition = new SpeechRecognition();
+            recognition.continuous = true;
+            recognition.lang = 'de-DE';
+            recognition.interimResults = true;
+            let isRecording = false;
+
+            recognition.onstart = () => {
+                isRecording = true;
+                statusDisplay.textContent = 'Höre zu...';
+                micButton.classList.add('pulse-red', 'bg-red-600');
+                micIcon.innerHTML = `<path fill-rule="evenodd" d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z" clip-rule="evenodd" />`; // Simple stop icon
+            };
+
+            recognition.onend = () => {
+                isRecording = false;
+                statusDisplay.textContent = 'Aufnahme beendet. Klicken, um erneut zu starten.';
+                micButton.classList.remove('pulse-red', 'bg-red-600');
+                micIcon.innerHTML = `<path d="M7 4a3 3 0 016 0v6a3 3 0 11-6 0V4z"/><path d="M5.5 4.5a.5.5 0 01.5-.5h8a.5.5 0 010 1h-8a.5.5 0 01-.5-.5zM9 14a4 4 0 004-4h-1a3 3 0 11-6 0H5a4 4 0 004 4z"/><path d="M9 16a1 1 0 011-1h0a1 1 0 110 2h-.5a.5.5 0 01-.5-.5v-1z"/>`; // Mic icon
+            };
+
+            recognition.onerror = (event) => {
+                statusDisplay.textContent = 'Fehler bei der Aufnahme: ' + event.error;
+            };
+
+            let final_transcript = '';
+            recognition.onresult = (event) => {
+                let interim_transcript = '';
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    if (event.results[i].isFinal) {
+                        final_transcript += event.results[i][0].transcript;
+                    } else {
+                        interim_transcript += event.results[i][0].transcript;
+                    }
+                }
+                transcriptArea.value = final_transcript + interim_transcript;
+                if (transcriptArea.value.trim() !== '') {
+                    sendButton.disabled = false;
+                } else {
+                    sendButton.disabled = true;
+                }
+            };
+            
+            micButton.addEventListener('click', () => {
+                if (isRecording) {
+                    recognition.stop();
+                } else {
+                    final_transcript = transcriptArea.value; // Keep existing text
+                    if (final_transcript.length > 0) final_transcript += ' ';
+                    recognition.start();
+                }
+            });
+
+            // Send Transcript Logic
+            sendButton.addEventListener('click', () => {
+                const email = emailInput.value;
+                const transcript = transcriptArea.value;
+
+                if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
+                    showMessage('Bitte geben Sie eine gültige E-Mail-Adresse ein.', 'error');
+                    return;
+                }
+
+                if (transcript.trim() === '') {
+                     showMessage('Es gibt keinen Text zum Senden.', 'error');
+                    return;
+                }
+                
+                // Simulate sending email
+                console.log('Sending transcript to:', email);
+                console.log('Content:', transcript);
+                
+                showMessage('Transkript wurde erfolgreich "gesendet"!', 'success');
+                // Here you would typically make a fetch call to a backend service.
+            });
+            
+            // Custom Message Box
+            function showMessage(message, type = 'success') {
+                const messageBox = document.getElementById('message-box');
+                const messageText = document.getElementById('message-text');
+                
+                messageText.textContent = message;
+                messageBox.className = 'fixed top-5 right-5 text-white py-2 px-4 rounded-lg shadow-lg animate-fadeIn'; // Reset classes
+                if (type === 'error') {
+                     messageBox.classList.add('bg-red-500');
+                } else {
+                     messageBox.classList.add('bg-green-500');
+                }
+
+                messageBox.classList.remove('hidden');
+                setTimeout(() => {
+                    messageBox.classList.add('hidden');
+                }, 3000);
+            }
+        });
+    </script>
+
+</body>
+</html>
