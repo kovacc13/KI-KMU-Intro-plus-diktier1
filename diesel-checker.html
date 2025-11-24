@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Diesel-Preischecker Kalsdorf bei Graz - Josef Poscharnegg GmbH</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
         body {
@@ -111,6 +112,13 @@
                         </svg>
                         Preise aktualisieren
                     </button>
+
+                    <!-- Auto-Update Info -->
+                    <div class="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                        <p class="text-sm text-blue-800 text-center">
+                            <span class="font-semibold">🔄 Auto-Update:</span> Nächste Aktualisierung in <span id="countdown-timer" class="font-mono font-bold">--:--</span>
+                        </p>
+                    </div>
                 </div>
             </div>
 
@@ -124,6 +132,40 @@
             <div id="error-message" class="hidden mt-4 bg-red-50 border border-red-200 rounded-lg p-4 text-red-800">
                 <p class="font-semibold">Fehler beim Laden der Daten</p>
                 <p id="error-text" class="text-sm mt-1"></p>
+            </div>
+        </div>
+
+        <!-- Price History Chart -->
+        <div class="max-w-4xl mx-auto mb-8">
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200">
+                <div class="bg-slate-800 text-white px-6 py-4 flex justify-between items-center">
+                    <div>
+                        <h2 class="text-xl font-bold">Preisverlauf (30 Tage)</h2>
+                        <p class="text-sm text-slate-300 mt-1">Medianpreis und Zuschlag im Zeitverlauf</p>
+                    </div>
+                    <button id="clear-history-btn" class="text-xs bg-red-600 hover:bg-red-700 px-3 py-1 rounded transition-colors">
+                        Verlauf löschen
+                    </button>
+                </div>
+                <div class="p-6">
+                    <canvas id="priceChart" height="100"></canvas>
+                </div>
+                <div class="px-6 pb-6">
+                    <div class="grid grid-cols-3 gap-4 text-center">
+                        <div class="bg-slate-50 p-3 rounded-lg">
+                            <p class="text-xs text-slate-600 mb-1">Durchschnitt (30T)</p>
+                            <p id="avg-price-30d" class="text-lg font-bold text-cyan-700">--,-- €</p>
+                        </div>
+                        <div class="bg-slate-50 p-3 rounded-lg">
+                            <p class="text-xs text-slate-600 mb-1">Höchstpreis (30T)</p>
+                            <p id="max-price-30d" class="text-lg font-bold text-red-600">--,-- €</p>
+                        </div>
+                        <div class="bg-slate-50 p-3 rounded-lg">
+                            <p class="text-xs text-slate-600 mb-1">Tiefstpreis (30T)</p>
+                            <p id="min-price-30d" class="text-lg font-bold text-green-600">--,-- €</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -177,8 +219,18 @@
             KALSDORF_LAT: 46.9625,
             KALSDORF_LNG: 15.4787,
             FUEL_TYPE: 'DIE',
-            RADIUS: 5 // km
+            RADIUS: 5, // km
+            DAILY_UPDATE_HOUR: 6, // 6:30 AM
+            DAILY_UPDATE_MINUTE: 30,
+            HISTORY_DAYS: 30,
+            STORAGE_KEY: 'dieselPriceHistory'
         };
+
+        // Global variables
+        let priceChart = null;
+        let autoUpdateTimer = null;
+        let countdownTimer = null;
+        let nextUpdateTime = null;
 
         // Surcharge table based on the provided PDF
         const SURCHARGE_TABLE = [
@@ -243,6 +295,59 @@
             return price.toFixed(3).replace('.', ',');
         }
 
+        // LocalStorage functions
+        function getPriceHistory() {
+            const stored = localStorage.getItem(CONFIG.STORAGE_KEY);
+            if (!stored) return [];
+            try {
+                const history = JSON.parse(stored);
+                // Filter out entries older than HISTORY_DAYS
+                const cutoffDate = new Date();
+                cutoffDate.setDate(cutoffDate.getDate() - CONFIG.HISTORY_DAYS);
+                return history.filter(entry => new Date(entry.timestamp) > cutoffDate);
+            } catch (e) {
+                console.error('Error parsing price history:', e);
+                return [];
+            }
+        }
+
+        function savePriceHistory(price, surcharge) {
+            const history = getPriceHistory();
+            const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+
+            // Check if we already have an entry for today
+            const existingIndex = history.findIndex(entry =>
+                entry.timestamp.split('T')[0] === today
+            );
+
+            const newEntry = {
+                timestamp: new Date().toISOString(),
+                price: price,
+                surcharge: surcharge
+            };
+
+            if (existingIndex >= 0) {
+                // Update existing entry
+                history[existingIndex] = newEntry;
+            } else {
+                // Add new entry
+                history.push(newEntry);
+            }
+
+            // Sort by timestamp
+            history.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+
+            localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(history));
+        }
+
+        function clearPriceHistory() {
+            if (confirm('Möchten Sie wirklich den gesamten Preisverlauf löschen?')) {
+                localStorage.removeItem(CONFIG.STORAGE_KEY);
+                updateChart();
+                alert('Preisverlauf wurde gelöscht.');
+            }
+        }
+
         // Fetch fuel prices from E-Control API
         async function fetchFuelPrices() {
             const url = `${CONFIG.API_URL}?latitude=${CONFIG.KALSDORF_LAT}&longitude=${CONFIG.KALSDORF_LNG}&fuelType=${CONFIG.FUEL_TYPE}&includeClosed=false`;
@@ -281,6 +386,9 @@
             // Get surcharge
             const surcharge = getSurcharge(kalsdorfMedian);
 
+            // Save to history
+            savePriceHistory(kalsdorfMedian, surcharge);
+
             // Update main display
             document.getElementById('kalsdorf-price').textContent = formatPrice(kalsdorfMedian) + ' €';
             document.getElementById('austria-price').textContent = formatPrice(austriaMedian) + ' €';
@@ -293,6 +401,9 @@
                 hour: '2-digit',
                 minute: '2-digit'
             });
+
+            // Update chart
+            updateChart();
 
             // Update station list
             const stationList = document.getElementById('station-list');
@@ -373,6 +484,179 @@
             }
         }
 
+        // Update Chart.js chart
+        function updateChart() {
+            const history = getPriceHistory();
+
+            if (history.length === 0) {
+                // No data yet
+                if (priceChart) {
+                    priceChart.data.labels = [];
+                    priceChart.data.datasets[0].data = [];
+                    priceChart.data.datasets[1].data = [];
+                    priceChart.update();
+                }
+                document.getElementById('avg-price-30d').textContent = '--,-- €';
+                document.getElementById('max-price-30d').textContent = '--,-- €';
+                document.getElementById('min-price-30d').textContent = '--,-- €';
+                return;
+            }
+
+            // Prepare data
+            const labels = history.map(entry => {
+                const date = new Date(entry.timestamp);
+                return date.toLocaleDateString('de-AT', { day: '2-digit', month: '2-digit' });
+            });
+            const priceData = history.map(entry => entry.price);
+            const surchargeData = history.map(entry => entry.surcharge);
+
+            // Calculate statistics
+            const avgPrice = priceData.reduce((a, b) => a + b, 0) / priceData.length;
+            const maxPrice = Math.max(...priceData);
+            const minPrice = Math.min(...priceData);
+
+            document.getElementById('avg-price-30d').textContent = formatPrice(avgPrice) + ' €';
+            document.getElementById('max-price-30d').textContent = formatPrice(maxPrice) + ' €';
+            document.getElementById('min-price-30d').textContent = formatPrice(minPrice) + ' €';
+
+            // Update or create chart
+            const ctx = document.getElementById('priceChart').getContext('2d');
+
+            if (priceChart) {
+                // Update existing chart
+                priceChart.data.labels = labels;
+                priceChart.data.datasets[0].data = priceData;
+                priceChart.data.datasets[1].data = surchargeData;
+                priceChart.update();
+            } else {
+                // Create new chart
+                priceChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: 'Medianpreis (€/L)',
+                                data: priceData,
+                                borderColor: 'rgb(8, 145, 178)',
+                                backgroundColor: 'rgba(8, 145, 178, 0.1)',
+                                yAxisID: 'y',
+                                tension: 0.3
+                            },
+                            {
+                                label: 'Zuschlag (%)',
+                                data: surchargeData,
+                                borderColor: 'rgb(245, 158, 11)',
+                                backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                                yAxisID: 'y1',
+                                tension: 0.3
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: {
+                            mode: 'index',
+                            intersect: false,
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.dataset.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.parsed.y !== null) {
+                                            if (context.datasetIndex === 0) {
+                                                label += formatPrice(context.parsed.y) + ' €';
+                                            } else {
+                                                label += context.parsed.y + '%';
+                                            }
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                type: 'linear',
+                                display: true,
+                                position: 'left',
+                                title: {
+                                    display: true,
+                                    text: 'Preis (€/L)'
+                                }
+                            },
+                            y1: {
+                                type: 'linear',
+                                display: true,
+                                position: 'right',
+                                title: {
+                                    display: true,
+                                    text: 'Zuschlag (%)'
+                                },
+                                grid: {
+                                    drawOnChartArea: false,
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // Calculate time until next update (6:30 AM)
+        function getTimeUntilNextUpdate() {
+            const now = new Date();
+            const next = new Date();
+            next.setHours(CONFIG.DAILY_UPDATE_HOUR, CONFIG.DAILY_UPDATE_MINUTE, 0, 0);
+
+            // If we're past 6:30 today, schedule for tomorrow
+            if (now >= next) {
+                next.setDate(next.getDate() + 1);
+            }
+
+            return next - now;
+        }
+
+        // Update countdown timer display
+        function updateCountdown() {
+            const msUntilUpdate = getTimeUntilNextUpdate();
+            const hours = Math.floor(msUntilUpdate / (1000 * 60 * 60));
+            const minutes = Math.floor((msUntilUpdate % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((msUntilUpdate % (1000 * 60)) / 1000);
+
+            const formatted = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            document.getElementById('countdown-timer').textContent = formatted;
+        }
+
+        // Schedule daily update
+        function scheduleDailyUpdate() {
+            // Clear existing timers
+            if (autoUpdateTimer) clearTimeout(autoUpdateTimer);
+            if (countdownTimer) clearInterval(countdownTimer);
+
+            // Calculate time until next update
+            const msUntilUpdate = getTimeUntilNextUpdate();
+
+            // Schedule the update
+            autoUpdateTimer = setTimeout(() => {
+                loadPrices();
+                // Reschedule for next day
+                scheduleDailyUpdate();
+            }, msUntilUpdate);
+
+            // Start countdown display (update every second)
+            countdownTimer = setInterval(updateCountdown, 1000);
+            updateCountdown(); // Initial update
+        }
+
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             // Populate surcharge table initially
@@ -387,8 +671,17 @@
                 tableBody.appendChild(tr);
             });
 
+            // Initialize chart with existing history
+            updateChart();
+
             // Set up refresh button
             document.getElementById('refresh-btn').addEventListener('click', loadPrices);
+
+            // Set up clear history button
+            document.getElementById('clear-history-btn').addEventListener('click', clearPriceHistory);
+
+            // Start daily update scheduler
+            scheduleDailyUpdate();
 
             // Load prices on page load
             loadPrices();
